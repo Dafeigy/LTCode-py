@@ -2,7 +2,7 @@ import sys
 from random import randint
 from struct import pack
 import time
-from utils import prCyan
+from typing import Union
 
 from io import BufferedReader
 
@@ -14,7 +14,7 @@ class LTEncoder():
         self.blocksize = blocksize
         pass
 
-    def _split_file(self, source:BufferedReader | str):
+    def _split_file(self, source:Union[BufferedReader,str]):
         """
         Block file byte contents into blocksize chunks, padding last one if necessary
         """
@@ -53,12 +53,12 @@ class LTEncoder():
             block_data = 0
             for ix in ix_samples:
                 block_data ^= blocks[ix]
-            print("======================================================")
-            print(f"File size: {filesize}, Block Size: {self.blocksize}, Blockseed: {blockseed}")
+            # print("======================================================")
+            # print(f"File size: {filesize}, Block Size: {self.blocksize}, Blockseed: {blockseed}")
             
             # Generate blocks of XORed data in network byte order
             block = (filesize, self.blocksize, blockseed, int.to_bytes(block_data, self.blocksize, sys.byteorder))
-            prCyan(block)
+            # prCyan(block)
             yield pack('!III%ss'%self.blocksize, *block)
 
 if __name__ == "__main__":

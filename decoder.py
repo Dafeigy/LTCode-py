@@ -59,6 +59,7 @@ class BlockGraph(object):
                     self.checks[node].append(check)
 
         # Are we done yet?
+        print(f"{len(self.eliminated)/self.num_blocks*100}")
         return len(self.eliminated) >= self.num_blocks
 
     def eliminate(self, node, data):

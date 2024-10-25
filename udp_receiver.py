@@ -6,7 +6,7 @@ if __name__ == "__main__":
     receiver = UDP_Client("127.0.0.1",9987)
     dec = decoder.LtDecoder()
     while True:
-        data = receiver.receive(("127.0.0.1",9987))
+        data = receiver.receive()
         # print(data)
         # header = struct.unpack("!III",data[:12])
         # block_data = int.from_bytes(data[12:], 'big')
@@ -18,7 +18,7 @@ if __name__ == "__main__":
                 break
         if finish_tag:
             print(dec.bytes_dump())
+            receiver.send("Done".encode(), ("127.0.0.1",9922))
+            print("I send")
             break
-        
-        # break
 
