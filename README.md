@@ -7,14 +7,18 @@ Encoder and Decoder are reconstructed based on [@Anrosent](https://github.com/an
 
 ## Progress
 
-- [ ] LT Encoder: Key function and logics are done and tested. 
+- [x] LT Encoder: Key function and logics are done and tested. 
 
-- [ ] LT Decoder: Still studying the decode process...
+- [x] LT Decoder: Kye function and logics are tested. Code need to be reconstructed though, maybe later.
 
-- [ ] Protobuf supported. This can be done in a very short time.
+- [ ] Protobuf supported. This can be done in a very short time. Maybe Tomorrow?
 
 
 UDP test are done perfectly! The next step will be using Protobuf and reconstruct Decoder!
 
 
 To be continued ...
+
+## To use
+
+See `udp_sender.py` ahd `udp_receiver.py` . Doc will be written some day in the futures.
