@@ -14,4 +14,7 @@ Encoder and Decoder are reconstructed based on [@Anrosent](https://github.com/an
 - [ ] Protobuf supported. This can be done in a very short time.
 
 
+UDP test are done perfectly! The next step will be using Protobuf and reconstruct Decoder!
+
+
 To be continued ...

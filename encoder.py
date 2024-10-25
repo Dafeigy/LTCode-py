@@ -66,6 +66,6 @@ if __name__ == "__main__":
     test_str = "This is an implementation of a Luby Transform code in Python, consisting of two executables, one for each encoding and decoding files. These are thin wrappers around a core stream/file API."
     with open ("test.txt",'rb') as f:
         for block in lteconder._gen_blocks(f):
-            # pass
-            time.sleep(1)
+            pass
+            # time.sleep(1)
 

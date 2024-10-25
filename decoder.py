@@ -156,6 +156,19 @@ def read_blocks(stream):
         block  = _read_block(header[1], stream)
         yield (header, block)
 
+def _udp_read_header(stream):
+    header_bytes = stream[:12]
+    return unpack("!III",header_bytes)
+
+def _udp_read_block(stream):
+    block_bytes = stream[12:]
+    return int.from_bytes(block_bytes, 'big')
+
+def udp_read_blocks(stream):
+
+    header = _udp_read_header(stream)
+    block = _udp_read_block(stream)
+    yield (header, block)
 # TODO: NO validation here that the bytes consist of a *single* block
 def block_from_bytes(bts):
     return next(read_blocks(io.BytesIO(bts)))
