@@ -11,7 +11,9 @@ if __name__ == "__main__":
         for block in decoder.udp_read_blocks(data):
             finish_tag = dec.consume_block(block)
             if dec.is_done():
+                print(f"Received file {dec.file_name}: ")
                 break
+        
         if finish_tag:
             print(dec.bytes_dump().decode())
             receiver.send("Done".encode(), ("127.0.0.1",9922))

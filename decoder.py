@@ -59,7 +59,7 @@ class BlockGraph(object):
                     self.checks[node].append(check)
 
         # Are we done yet?
-        print("\033[H\033[J")
+        # print("\033[H\033[J")
         print(f"{int(10 * len(self.eliminated)/self.num_blocks)  * '----'}" + f"> {len(self.eliminated)/self.num_blocks * 100}%")
         
         return len(self.eliminated) >= self.num_blocks
@@ -94,12 +94,13 @@ class LtDecoder(object):
         self.block_graph = None
         self.prng = None
         self.initialized = False
+        self.file_name = ""
 
     def is_done(self):
         return self.done
 
     def consume_block(self, lt_block):
-        (filesize, blocksize, blockseed), block = lt_block
+        (filesize, blocksize, blockseed), block, file_name = lt_block
 
         # first time around, init things
         if not self.initialized:
@@ -113,7 +114,8 @@ class LtDecoder(object):
 
         # Run PRNG with given seed to figure out which blocks were XORed to make received data
         _, _, src_blocks = self.prng.get_src_blocks(seed=blockseed)
-
+        # Set file_name
+        self.file_name = file_name
         # If BP is done, stop
         self.done = self._handle_block(src_blocks, block)
         return self.done
@@ -163,15 +165,21 @@ def _udp_read_header(stream):
     header_bytes = stream[:12]
     return unpack("!III",header_bytes)
 
-def _udp_read_block(stream):
-    block_bytes = stream[12:]
+def _udp_read_block(stream, offset):
+    block_bytes = stream[16+offset:]
     return int.from_bytes(block_bytes, 'big')
+
+def _udp_read_file_name(stream):
+    file_len = int.from_bytes(stream[12:16], 'big')
+    return file_len, stream[16:16+file_len].decode()
+    
 
 def udp_read_blocks(stream):
 
     header = _udp_read_header(stream)
-    block = _udp_read_block(stream)
-    yield (header, block)
+    file_offset, file_name = _udp_read_file_name(stream)
+    block = _udp_read_block(stream, file_offset)
+    yield (header, block, file_name)
 
 # TODO: NO validation here that the bytes consist of a *single* block
 def block_from_bytes(bts):

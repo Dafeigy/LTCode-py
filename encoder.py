@@ -10,8 +10,9 @@ import sampler
 
 
 class LTEncoder():
-    def __init__(self, blocksize) -> None:
+    def __init__(self, blocksize:int, file_name:str) -> None:
         self.blocksize = blocksize
+        self.file_name = file_name
         pass
 
     def _split_file(self, source:Union[BufferedReader,str]):
@@ -56,8 +57,8 @@ class LTEncoder():
             print(f"d: {d}")
             print(f"{ix_samples}")
             # Generate blocks of XORed data in network byte order
-            block = (filesize, self.blocksize, blockseed, int.to_bytes(block_data, self.blocksize, sys.byteorder))
-            yield pack('!III%ss'%self.blocksize, *block)
+            block = (filesize, self.blocksize, blockseed, len(self.file_name.encode()), self.file_name.encode(), int.to_bytes(block_data, self.blocksize, sys.byteorder))
+            yield pack(f'!IIII{len(self.file_name.encode())}s{self.blocksize}s', *block)
 
 if __name__ == "__main__":
     lteconder = LTEncoder(32)
