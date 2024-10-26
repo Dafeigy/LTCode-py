@@ -59,7 +59,9 @@ class BlockGraph(object):
                     self.checks[node].append(check)
 
         # Are we done yet?
-        print(f"{len(self.eliminated)/self.num_blocks*100}")
+        print("\033[H\033[J")
+        print(f"{int(10 * len(self.eliminated)/self.num_blocks)  * '----'}" + f"> {len(self.eliminated)/self.num_blocks * 100}%")
+        
         return len(self.eliminated) >= self.num_blocks
 
     def eliminate(self, node, data):
@@ -170,6 +172,7 @@ def udp_read_blocks(stream):
     header = _udp_read_header(stream)
     block = _udp_read_block(stream)
     yield (header, block)
+
 # TODO: NO validation here that the bytes consist of a *single* block
 def block_from_bytes(bts):
     return next(read_blocks(io.BytesIO(bts)))
@@ -188,25 +191,3 @@ def decode(in_stream, out_stream=None, **kwargs):
         decoder.stream_dump(out_stream)
     else:
         return decoder.bytes_dump()
-
-"""
-# Usage 1: Blocking
-# Blocks until decoding is complete, returns bytes
-data = decode.decode(stdin.buffer)
-
-
-# Usage 2: Incremental
-# Consume blocks in a loop, breaking when finished
-decoder = decode.LtDecoder()
-for block in decode.read_blocks(stdin.buffer):
-    decoder.consume_block(block)
-    if decoder.is_done():
-       break 
-
-# You can collect the decoded transmission as bytes
-data = decoder.bytes_dump()
-
-# Or You can write the output directly to another stream
-decoder.stream_dump(sys.stdout.buffer)
-
-"""

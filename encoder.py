@@ -53,12 +53,10 @@ class LTEncoder():
             block_data = 0
             for ix in ix_samples:
                 block_data ^= blocks[ix]
-            # print("======================================================")
-            # print(f"File size: {filesize}, Block Size: {self.blocksize}, Blockseed: {blockseed}")
-            
+            print(f"d: {d}")
+            print(f"{ix_samples}")
             # Generate blocks of XORed data in network byte order
             block = (filesize, self.blocksize, blockseed, int.to_bytes(block_data, self.blocksize, sys.byteorder))
-            # prCyan(block)
             yield pack('!III%ss'%self.blocksize, *block)
 
 if __name__ == "__main__":
