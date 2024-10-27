@@ -59,8 +59,8 @@ class BlockGraph(object):
                     self.checks[node].append(check)
 
         # Are we done yet?
-        # print("\033[H\033[J")
-        print(f"{int(10 * len(self.eliminated)/self.num_blocks)  * '----'}" + f"> {len(self.eliminated)/self.num_blocks * 100}%")
+        print("\033[H\033[J")
+        print(f"{int(40 * len(self.eliminated)/self.num_blocks) * '=':<40}" + f"> {len(self.eliminated)/self.num_blocks * 100}%")
         
         return len(self.eliminated) >= self.num_blocks
 

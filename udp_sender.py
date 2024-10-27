@@ -9,12 +9,15 @@ if __name__ == "__main__":
     sender = UDP_Client("127.0.0.1",9988)
     flager = UDP_Client("127.0.0.1",9922)
     r, w, e = select.select([flager.sock], [sender.sock], [])
-
-    lteconder = encoder.LTEncoder(32,"test.txt")
-    test_str = """This is an implementation of a Luby Transform code in Python, consisting of two executables, one for each encoding and decoding files. These are thin wrappers around a core stream/file API."""
-    for block in lteconder._gen_blocks(test_str):
+    file = "LICENSE"
+    lteconder = encoder.LTEncoder(32,file)
+    ## Processing File:
+    f = open(file).read()
+    for block in lteconder._gen_blocks(f):
+    ## Processing Str
+    # for block in lteconder._gen_blocks(test_str):
         sender.send(block, ("127.0.0.1",9987))
-        # time.sleep(1)
+        # time.sleep(0.2)
         ready_to_read, _, _ = select.select([flager.sock], [], [], 0)
 
         if ready_to_read:
